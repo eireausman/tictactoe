@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+<link rel="stylesheet" href="styles.css">
+
+<body>
+    <header class="header">
+       
+        <h4 class="headerTitle">
+            Tic Tac Toe
+        </h4>
+        <p class="headerButtons">
+            New Game
+        </p>
+    </header>  
+    <div class="gameSetup">
+        <form class="gameSetupForm">
+            <div class="gameSetupFormRow"><label for="playerName">Your Name:</label>
+                <input type="text" id="playerName" name="playerName" placeholder="Your Name">    
+            </div>
+            <div class="gameSetupFormRow"><label for="playerName">Your Name:</label>
+            <label for="pieceO">O (noughts)</label>
+            <input type="radio" id="pieceO" name="piece" group="pieceSelection">
+            </div>  
+            <div class="gameSetupFormRow"><label for="playerName">Your Name:</label>
+            <label for="pieceX">X (crosses)</label>
+            <input type="radio" id="pieceX" name="piece" group="pieceSelection"> 
+            </div>
+        </form>
+    </div> 
+    <div class="gameContainer">
+        <div class="gameStatus">
+            You: x
+            <br>
+            Turn: Yours
+        </div>
+        <div class="gameGrid">
+            
+    </div>
+    
+    <div class="winModal">
+        You Win!  Well Done!
+
+        Start a new Game?
+
+        <button class="NewGameButton" alt="Play another game">Play Again</button>
+    </div>
+
+</body>
+<script src="script.js" defer></script>
+</html>
