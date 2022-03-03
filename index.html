@@ -8,30 +8,24 @@
 <link rel="stylesheet" href="styles.css">
 
 <body>
+    <div class="winModalContainer">
+        <div class="winModal">
+            <p class="winModalResultMessage">
+            </p>
+
+            <button class="winModalButton" alt="Play another game">Play Again</button>
+        </div>
+    </div>
     <header class="header">
        
         <h4 class="headerTitle">
             Tic Tac Toe
         </h4>
-        <p class="headerButtons">
+        <p class="newGameButtons">
             New Game
         </p>
     </header>  
-    <div class="gameSetup">
-        <form class="gameSetupForm">
-            <div class="gameSetupFormRow"><label for="playerName">Your Name:</label>
-                <input type="text" id="playerName" name="playerName" placeholder="Your Name">    
-            </div>
-            <div class="gameSetupFormRow"><label for="playerName">Your Name:</label>
-            <label for="pieceO">O (noughts)</label>
-            <input type="radio" id="pieceO" name="piece" group="pieceSelection">
-            </div>  
-            <div class="gameSetupFormRow"><label for="playerName">Your Name:</label>
-            <label for="pieceX">X (crosses)</label>
-            <input type="radio" id="pieceX" name="piece" group="pieceSelection"> 
-            </div>
-        </form>
-    </div> 
+    
     <div class="gameContainer">
         <div class="gameStatus">
             You: x
@@ -39,16 +33,9 @@
             Turn: Yours
         </div>
         <div class="gameGrid">
-            
+        </div>
     </div>
-    
-    <div class="winModal">
-        You Win!  Well Done!
-
-        Start a new Game?
-
-        <button class="NewGameButton" alt="Play another game">Play Again</button>
-    </div>
+   
 
 </body>
 <script src="script.js" defer></script>

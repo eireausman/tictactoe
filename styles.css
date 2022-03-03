@@ -70,7 +70,7 @@ table {
     justify-content: flex-start;
     margin-left: 10px;
 }
-.headerButtons {
+.newGameButtons {
     display: flex;
     justify-content: flex-end;
     margin-right: 10px;
@@ -80,10 +80,11 @@ table {
     background-color: rgb(255, 255, 255);
     color:black;
     border: solid 1px gray;
+    cursor: pointer;
     transition: .35s;
 }
 
-.headerButtonsMouseEnter {
+.newGameButtonsMouseEnter {
     background-color: black;
     color: white;
     border: solid 1px gray;
@@ -109,7 +110,14 @@ table {
 .gameGrid {
     border: 8px solid black;
     border-radius: 15px;
-    
+    display: flex;
+    max-width: 300px;
+    flex-wrap: wrap;
+    transition: 0.5s;
+}
+
+.gameGridFlash {
+    border: 8px solid rgb(0, 0, 0);
 }
 
 .gameGridCell {
@@ -119,8 +127,12 @@ table {
     justify-content: center;
     align-items: center;
     border: 1px solid black;
+    cursor: pointer;
     transition: .35s;
 }
+
+
+
 .gameGridCellMouseAnim {
     background-color: rgb(237, 181, 61);
     color:black;
@@ -133,38 +145,45 @@ table {
 }
 
 
+.winModalContainer {
+    display:flex;
+    justify-content: center;
+    width:100vw;
+    height:100vh;
+    background-color:rgba(36, 36, 36, 0.9);
+    position:fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    visibility: hidden;
+    opacity:0;
+    transition: 0.4s;
+}
 
 .winModal {
     display: flex;
-    justify-content: center;    
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color:rgba(36, 36, 36, 0.9);
-    padding-top: 15%;
-    padding-bottom: 20px;
-    
-    visibility: hidden;
-    opacity:0;
-
-    transition: 0.4s;
+    flex-direction: column;
+    max-width: 350px;
+    height:200px;
+    margin-top: 10vh;
+    background-color:rgba(75, 75, 75, 0.9);
+    color: rgb(255, 255, 255);
+    padding: 30px;
+    border: white 4px solid;
+    border-radius: 3px;
+    align-items: center;
 }
-.winModalVisible {
+.winModalContainerVisible {
     visibility: visible;
     opacity: 1;
 }
 
-.gameSetup {
-    display:flex;
-    justify-content: center;
-    /* visibility: hidden;
-    opacity:0; */
+.winModalResultMessage{
+   padding: 25px;
 }
 
-.gameSetupForm {
-    display:flex;
-    flex-direction: column;
-
+.winModalButton {
+    max-width: 80px;
+    cursor: pointer;
 }

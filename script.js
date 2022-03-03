@@ -2,31 +2,23 @@
 
 
 const gameGridModule = (() => {
-    const cellValues = {
-            11: "",
-            12: "",
-            13: "",
-            21: "",
-            22: "",
-            23: "",
-            31: "",
-            32: "",
-            33: "",
-        }
+    const cellValues = [0,1,2,3,4,5,6,7,8];
 
     const updateCellValue = (PieceChoice, cellRef) => {
         // update the array values
         cellValues[cellRef] = PieceChoice;
         // update the GUI cell:
         cellToUpdate = document.querySelector(`[data-gridRef='${cellRef}']`);
-        console.log(`cell = ${cellToUpdate} & piece = ${cellToUpdate}`);
         cellToUpdate.textContent = PieceChoice;
-        // console.log(cellValues);
         }
         
     const gameGrid = document.querySelector('.gameGrid');
+    
     const createGameGrid = () => {
-        for (row = 1; row <= 3; row++ ) {
+            
+      // create the initial grid on loading of the page
+            let arrayRef = 0;
+            for (row = 1; row <= 3; row++ ) {
             let col = 0;
             newGameGridRow = document.createElement(`div`);
             newGameGridRow.classList.toggle(`gameGridRow`);
@@ -36,8 +28,7 @@ const gameGridModule = (() => {
                 col++
                 newGameGridCell = document.createElement(`div`);
                 newGameGridCell.classList.toggle(`gameGridCell`);
-                newGameGridCell.setAttribute('data-gridRef', `${row}${col}`);
-                newGameGridCell.textContent = cellValues[`${row}${col}`];
+                newGameGridCell.setAttribute('data-gridRef', `${arrayRef}`);
                 newGameGridRow.appendChild(newGameGridCell);
                 newGameGridCell.addEventListener('click', gameGridCellClick);
                 newGameGridCell.addEventListener('mouseenter', function(e) {
@@ -46,15 +37,18 @@ const gameGridModule = (() => {
                 newGameGridCell.addEventListener('mouseleave', function(e) {
                     e.target.classList.remove('gameGridCellMouseAnim');
                 });
+                arrayRef++;
             }
         }
+        
     }
 
 
+// update the cell and kick off the move actions when a cell is clicked
     function gameGridCellClick (e) {
+
         cellRef = e.target.dataset.gridref;
         if(e.target.textContent == "") {
-            console.log(thisGame.activePlayer);
             thisGame.PlayerHasATurn(thisGame.activePlayer, cellRef);    
         } else {
             alert('Please choose a free square');
@@ -63,12 +57,10 @@ const gameGridModule = (() => {
         
     }
 
-
+// Reset the cell values to default values
     const resetGame = () => {
-    // Reset the cell values to default values
-    
-        for (cell in cellValues) {
-            cellValues[cell] = "";
+        for (i = 0; i < 9; i++) {
+            cellValues[i] = i;
         }
         // delete the dom elements that represent the previous game
         const gameGridToDelete = document.querySelector(".gameGrid");    
@@ -87,169 +79,188 @@ const gameGridModule = (() => {
 
 
 
-   // possible win combinations:
-   const updateWinCombos = () => {
-    let wincombos = {
-        row1: `${cellValues[11]}${cellValues[12]}${cellValues[13]}`,
-        row2: `${cellValues[21]}${cellValues[22]}${cellValues[23]}`,
-        row3: `${cellValues[31]}${cellValues[32]}${cellValues[33]}`,
-        col1: `${cellValues[11]}${cellValues[21]}${cellValues[31]}`,
-        col2: `${cellValues[12]}${cellValues[22]}${cellValues[32]}`,
-        col3: `${cellValues[13]}${cellValues[23]}${cellValues[33]}`,
-        diagR1C3: `${cellValues[11]}${cellValues[22]}${cellValues[33]}`,
-        diagR3C3: `${cellValues[13]}${cellValues[22]}${cellValues[31]}`,  
-    }
-    return wincombos;
-}
+  
 
-const updateDrawString = () => {
-    let drawString = "";
-    cellValuesArray = Object.values(cellValues);
-    for (i = 0; i < cellValuesArray.length; i++ ) {
-        if (cellValuesArray[i] == "") {
-            drawString += "E"; // for Empty grid cell.  This allows for a string search for "E" to confirm if any cells are free to play.  I.e. is it a draw?
-        } else {
-            drawString += cellValuesArray[i];
-        }
-    }
-    
-    return drawString;
-}
-
-return {createGameGrid, cellValues, updateCellValue, resetGame, updateGameStatus, updateWinCombos, updateDrawString}
+return {createGameGrid, cellValues, updateCellValue, resetGame, updateGameStatus}
 
 })();
 
 const player = (name, PieceChoice) => {
-    // set a string to compare against when checking for winning combos
-    let playerTurnWinningString = "";
-    for (i = 0; i < 3; i++) {
-                playerTurnWinningString = `${PieceChoice}${PieceChoice}${PieceChoice}`;
-            }
-
-   
-
-    console.log(`name = ${name} | piece = ${PieceChoice}`);
-
-    
-    
-
-    return {name, PieceChoice, playerTurnWinningString};
+    return {name, PieceChoice};
  };
 
  
 
 
  const newGame = () => {
-    gameGridModule.resetGame();
-    function obtainUserPlayerInfo() {
-        const name = "DD" // prompt("Please enter your name");
-        let PieceChoice = "invalidString";
-            do {
-                PieceChoice = prompt("enter O or X");
-            } while (PieceChoice != "X" && PieceChoice != "x" && PieceChoice != "O" && PieceChoice != "o");
     
-        return {name, PieceChoice};
-    }
-    // gameGridModule.updateGameStatus();
-
-    const userPlayerInfo = obtainUserPlayerInfo();
-    const playerOne = player(userPlayerInfo.name, userPlayerInfo.PieceChoice);
-
-        let compPieceChoice = "-";
-        if (playerOne.PieceChoice == "O") {
-            compPieceChoice = "X";
-        } else {
-            compPieceChoice = "O";
-        }
-
-    const playerTwo = player("Computer", compPieceChoice);
-    gameGridModule.updateGameStatus(playerOne.name, playerOne.PieceChoice);
+    const playerOne = player("User", "O");
+    const playerTwo = player("Computer", "X");
     
-    let activePlayer = "";
-    function updateActivePlayer(PieceChoice) {
-            if (PieceChoice == playerOne.PieceChoice) {
-                activePlayer = playerTwo;
-                 console.log(`${PieceChoice} - ${playerTwo.PieceChoice}`)
-                 console.log(`ACTIVE PLAYER = ${Object.values(activePlayer)}`);
-            } else {
-                activePlayer = playerOne;
-                console.log(`ACTIVE PLAYER = ${Object.values(activePlayer)}`);  
-            }
-            return activePlayer;
-        }
-        
-
-        
     const PlayerHasATurn = (activePlayer, cellRef) => {
-        gameGridModule.updateCellValue(activePlayer.PieceChoice, cellRef);
-        WinCombosStateAfterTurn = gameGridModule.updateWinCombos();
-        currentResult = gameEndCheck();
-        if (currentResult == 'win') {
-            winModal.classList.add('winModalVisible');
-        }
-        // console.table(WinCombosStateAfterTurn);
-        // console.log(gameGridModule.updateDrawString());
+      
+      gameGridModule.updateCellValue(activePlayer.PieceChoice, cellRef);
         
-        function gameEndCheck () {
-            let winCheck = Object.values(WinCombosStateAfterTurn).filter(function (el) {
-                // console.log(`${el} - ${playerTurnWinningString}`)
-                return el == activePlayer.playerTurnWinningString;
-            });
-                if (winCheck == activePlayer.playerTurnWinningString) {
-                    return "win";
-                } else if (gameGridModule.updateDrawString().includes("E")) {
-                    return "continue";
-                } else {
-                    return "draw";
-                }
+        
+      let playerOnePiece = playerOne.PieceChoice;
+      let playerTwoPiece = playerTwo.PieceChoice;
+
+
+        // check if the user player has won
+      if (winCheck(gameGridModule.cellValues, playerOnePiece) == true) {
+          DOMactivities.winModalShow("You win! Play Again?");
+          return;
+      }
+      if (freeCells(gameGridModule.cellValues).length == 0) {
+          DOMactivities.winModalShow("It's a tie.  Play Again?");
+          return;
+        }
+        let playerTwoBestCellRef = minimax(gameGridModule.cellValues, playerTwoPiece).index;
+        gameGridModule.updateCellValue(thisGame.playerTwo.PieceChoice, playerTwoBestCellRef);
+        if (winCheck(gameGridModule.cellValues, playerTwoPiece) == true) {
+          DOMactivities.winModalShow("Oh No! Computer wins.  Play Again?");
+          return;
         }
 
+
+        function minimax(newBoard, piece) {
             
+            let emptyCells = freeCells(newBoard);
+
+            if (winCheck(newBoard, playerOnePiece)) {
+              return {
+                score: -100
+              };
+            } else if (winCheck(newBoard, playerTwoPiece)) {
+              return {
+                score: 100
+              };
+            } else if (emptyCells.length === 0) {
+              return {
+                score: 0
+              };
+            }
             
-            // console.log(PieceChoice);
-            thisGame.activePlayer = thisGame.updateActivePlayer(activePlayer.PieceChoice);
-            if (thisGame.activePlayer == thisGame.playerTwo) {
-                makeComputerMove(thisGame.activePlayer);
+          
+            let moves = [];
+            for (i = 0; i < emptyCells.length; i++) {
+              let move = {};
+              move.index = newBoard[emptyCells[i]];
+              newBoard[emptyCells[i]] = piece;
+          
+              if (piece == playerTwoPiece) {
+                let miniMaxScore = minimax(newBoard, playerOnePiece);
+                move.score = miniMaxScore.score;
+              } else {
+                var miniMaxScore = minimax(newBoard, playerTwoPiece);
+                move.score = miniMaxScore.score;
+              }
+              newBoard[emptyCells[i]] = move.index;
+              moves.push(move);
             }
-
-            function makeComputerMove(computerPlayer) {
-                let randomeCellRefArray = [];
-                for (gridRef in gameGridModule.cellValues) {
-                    if (gameGridModule.cellValues[gridRef] == "") {
-                        randomeCellRefArray.push(gridRef);
-                    }
-                }               
-                chosenCellArrayPos = Math.floor(Math.random() * randomeCellRefArray.length); 
-                chosenCellForComputerTurn = randomeCellRefArray[chosenCellArrayPos];
-                
-                gameGridModule.updateCellValue(computerPlayer.PieceChoice, chosenCellForComputerTurn);
-                
-                thisGame.activePlayer = thisGame.updateActivePlayer(computerPlayer.PieceChoice);
-                console.log(gameEndCheck());
+          
+            var bestMove;
+            if (piece === playerTwoPiece) {
+              var bestScore = -10000;
+              for (var i = 0; i < moves.length; i++) {
+                if (moves[i].score > bestScore) {
+                  bestScore = moves[i].score;
+                  bestMove = i;
+                }
+              }
+            } else {
+              var bestScore = 10000;
+              for (var i = 0; i < moves.length; i++) {
+                if (moves[i].score < bestScore) {
+                  bestScore = moves[i].score;
+                  bestMove = i;
+                }
+              }
             }
+            return moves[bestMove];
+          }
+          
+          
+          function freeCells(newBoard) {
+            return newBoard.filter(s => s != "X" && s != "O");
+          }
+          
+          
+          // check for a Win
+          function winCheck(newBoard, piece) {
+            let playerWinningString = `${piece}${piece}${piece}`;
+            if (
+              (`${newBoard[0]}${newBoard[1]}${newBoard[2]}` == playerWinningString) ||
+              (`${newBoard[3]}${newBoard[4]}${newBoard[5]}` == playerWinningString) ||
+              (`${newBoard[6]}${newBoard[7]}${newBoard[8]}` == playerWinningString) ||
+              (`${newBoard[0]}${newBoard[3]}${newBoard[6]}` == playerWinningString) ||
+              (`${newBoard[1]}${newBoard[4]}${newBoard[7]}` == playerWinningString) ||
+              (`${newBoard[2]}${newBoard[5]}${newBoard[8]}` == playerWinningString) ||
+              (`${newBoard[0]}${newBoard[4]}${newBoard[8]}` == playerWinningString) ||
+              (`${newBoard[2]}${newBoard[4]}${newBoard[6]}` == playerWinningString)
+            ) {
+              return true;
+            } else {
+              return false;
+            }
+          }
 
-         }
+        ///////////////////////////////////////////////////
+        ///////////////////////////////////////////////////
+        ///////////////////////////////////////////////////
+        ///////////////////////////////////////////////////
 
-    return {playerOne, playerTwo, updateActivePlayer, PlayerHasATurn};
+        
+    }
+   
+               
+    
+
+    gameGridModule.resetGame();
+    gameGridModule.updateGameStatus(playerOne.name, playerOne.PieceChoice);
+
+
+    
+    return {playerOne, playerTwo, PlayerHasATurn};
 }
 
 
- 
-const winModal = document.querySelector(".winModal");
-const newGameButton = document.querySelector(".headerButtons");
-newGameButton.addEventListener('click', newGame);
-newGameButton.addEventListener('mouseenter', function(e) {
-    e.target.classList.add('headerButtonsMouseEnter');
-});
-newGameButton.addEventListener('mouseleave', function(e) {
-    e.target.classList.remove('headerButtonsMouseEnter');
-});
+const DOMactivities = (() => {
 
+const gameGrid = document.querySelector('.gameGrid');
+const winModal = document.querySelector(".winModalContainer");
+const resultMessage = document.querySelector(".winModalResultMessage");
+const newGameButtons = document.querySelectorAll(".newGameButtons");
+newGameButtons.forEach(e => e.addEventListener("click", function (e) {
+  newGame();
+  winModal.classList.remove('winModalContainerVisible');
+}));
+
+newGameButtons.forEach(e => e.addEventListener("mouseenter", function (e) {
+  e.target.classList.add('newGameButtonsMouseEnter');
+}));
+
+newGameButtons.forEach(e => e.addEventListener("mouseleave", function (e) {
+  e.target.classList.remove('newGameButtonsMouseEnter');
+}));
+
+const winModalButton = document.querySelector(".winModalButton");
+const winModalShow = function winModalShow(message) {
+  winModal.classList.add('winModalContainerVisible');
+  resultMessage.textContent = message;
+  winModalButton.addEventListener("click", function (e) {
+    newGame();
+    winModal.classList.remove('winModalContainerVisible');
+  });
+}
+
+
+
+
+return {winModalShow}
+})();
 
 
 let thisGame = newGame();
-// console.log(thisGame);
-thisGame.activePlayer = thisGame.updateActivePlayer("o");
+thisGame.activePlayer = thisGame.playerOne;
 
-// console.log(playerOne);
